@@ -4,10 +4,6 @@ const port = 8080;
 app.get('/', (req, res) => {
     res.status(200).send({test:"Server is running ..... "});
 });
-
-app.get('/oussema', (req,res)=>{
-    res.status(200).send({mssage:"helloooo"})
-})
 app.get('/ons', (req, res) => {
     res.status(200).send({test:"hello from the other side :D"});
 });
