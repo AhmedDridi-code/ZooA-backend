@@ -11,7 +11,9 @@ app.get('/ons', (req, res) => {
 app.get('/onsssssss', (req, res) => {
     res.status(200).send({test:"hello from the other side :D"});
 });
-
+app.get('/onsssssss', (req, res) => {
+    res.status(200).send({test:"hello from the other side :D"});
+});
 
 app.get('/oussema', (req,res)=>{
     res.status(200).send({mssage:"helloooo"})
