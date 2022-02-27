@@ -9,6 +9,24 @@ app.get('/ons', (req, res) => {
 });
 
 
+app.get('/ons', (req, res) => {
+    res.status(200).send({test:"hello from the other side :D"});
+});
+
+app.get('/onsssssss', (req, res) => {
+    res.status(200).send({test:"hello from the other side :D"});
+});
+app.get('/onsssssss', (req, res) => {
+    res.status(200).send({test:"hello from the other side :D"});
+});
+app.get('/ons', (req, res) => {
+    res.status(200).send({test:"hello from the other side :D"});
+});
+
+
+app.get('/oussema', (req,res)=>{
+    res.status(200).send({mssage:"helloooo"})
+})
 app.get('/zineddine', (req, res) => {
     res.status(200).send({test:"Hello zineddine's branch"});
 });
@@ -16,4 +34,4 @@ app.get('/zineddine2', (req, res) => {
     res.status(200).send({test:"Hello zineddine's 2nd commt branch"});
 });
 app.listen(8080);
-console.log('listening on port ',port);
+console.log('listening on port ',port);    
