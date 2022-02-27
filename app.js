@@ -7,6 +7,7 @@ app.get('/', (req, res) => {
 app.get('/ons', (req, res) => {
     res.status(200).send({test:"hello from the other side :D"});
 });
+
 app.get('/onsssssss', (req, res) => {
     res.status(200).send({test:"hello from the other side :D"});
 });
