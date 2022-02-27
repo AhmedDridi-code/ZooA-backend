@@ -5,5 +5,11 @@ app.get('/', (req, res) => {
     res.status(200).send({test:"Hello World"});
 });
 
+
+app.get('/ahmed', (req, res) => {
+    res.status(200).send({test:"Hello from Ahmed Branch"});
+});
+
+
 app.listen(8080);
 console.log('listening on port 8080');
