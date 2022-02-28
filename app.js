@@ -9,5 +9,11 @@ app.get('/ons', (req, res) => {
 });
 
 
+app.get('/zineddine', (req, res) => {
+    res.status(200).send({test:"Hello zineddine's branch"});
+});
+app.get('/zineddine2', (req, res) => {
+    res.status(200).send({test:"Hello zineddine's 2nd commt branch"});
+});
 app.listen(8080);
 console.log('listening on port ',port);
