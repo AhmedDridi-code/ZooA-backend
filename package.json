@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "node app.js"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -14,5 +14,8 @@
     "express": "^4.17.3",
     "mongoose": "^6.2.4",
     "nodemon": "^2.0.15"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
   }
 }
