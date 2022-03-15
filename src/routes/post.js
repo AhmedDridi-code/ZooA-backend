@@ -30,7 +30,7 @@ router.post('/post',(req, res)=>{
 
 //delete a post
 router.delete('/post/:id',(req, res)=>{
-    const post = Post.findById({_id :req.body.})
+    const post = Post.findByIdAndDelete({},())
 })
 
 //update a post
