@@ -17,8 +17,6 @@ const userSchema = mongoose.Schema({
         ref:"Rating",
     }],
     totalRatings:{type:Number,default:0}
-
 });
-
 
 module.exports = mongoose.model("User",userSchema);
