@@ -10,7 +10,7 @@ const app = express();
 
 const veterenaireRoute = require('./src/routes/veterinaire')
 const rdvRoute = require('./src/routes/rendez-vous')
-
+const postsRoute = require('./src/routes/post');
 //========== configuration ============
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,7 +41,7 @@ mongoose.connect("mongodb+srv://admin:admindb@cluster0.yl1pn.mongodb.net/Zooa?re
 
 app.use("/api/veterinaire", veterenaireRoute)
 app.use("/api/appointement", rdvRoute)
-
+app.use("/api/posts",postsRoute)
 
 // ======== exporting app ========
 module.exports =app;
