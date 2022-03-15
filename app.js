@@ -4,8 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
-// const postsRoute = require('./src/routes/post');
-// const usersRoute = require('./src/routes/user');
+const postsRoute = require('./src/routes/post');
+const usersRoute = require('./src/routes/user');
 //app.use(cors);
 
 const veterenaireRoute = require('./src/routes/veterinaire')
@@ -42,6 +42,7 @@ mongoose.connect("mongodb+srv://admin:admindb@cluster0.yl1pn.mongodb.net/Zooa?re
 app.use("/api/veterinaire", veterenaireRoute)
 app.use("/api/appointement", rdvRoute)
 app.use("/api/posts",postsRoute)
+app.use("/api/users",usersRoute)
 
 // ======== exporting app ========
 module.exports =app;
