@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/user')
 //add veterenaire
-router.post('/veterinaire', (req,res) =>{
+router.post('/', (req,res) =>{
     let veterenaire = new User({
         fname: req.body.fname,
         lname: req.body.lname,
@@ -30,16 +30,17 @@ router.get('/', (req,res)=>{
     })
 })
 //get veterinaire by id
-router.get('/veterinaire/:id',(req,res)=>{
+router.get('/:id',(req,res)=>{
     veterinaire = User.find({_id:req.params.id}).then(resultat=>{
-        res.send(resultat).catch(err=>{
-            res.status(404).send({memssage:"veterinaire does not exist"})
-            console.log(err)
-        })
+        res.send(resultat)
+        // .catch(err=>{
+        //     res.status(404).send({memssage:"veterinaire does not exist"})
+        //     console.log(err)
+        // })
     })
 })
 //delete by id 
-router.delete('/veterinaire/:id',async (req,res)=>{
+router.delete('/:id',async (req,res)=>{
     await User.findByIdAndDelete(req.params.id).then({
         message:"deleted successfully"
     })
