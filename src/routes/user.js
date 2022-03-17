@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/user')
-
+const userController= require('../controllers/userController')
 router.post("/signup",(req,res)=>{
     bcrypt.hash(req.body.password,10)
 .then(hash=>{
@@ -52,6 +52,7 @@ router.post("/login",(req,res)=>{
         return res.status(401).json({message:"problem in bycript"})
     })
 })
+router.delete("/deleteuser/:id", userController.deleteUser)
 
 
 module.exports =router;

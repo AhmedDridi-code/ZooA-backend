@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
-    fname:{type:String, required:true},
-    lname:{type:String, required:true},
+    fname:{type:String, required:[true , "Firstname is required"]},
+    lname:{type:String, required: [true , "Lastname is required"]},
     birthdate:{type:Date, required:true},
-    phone:{type:String, required:true,unique:true},
+    phone:{type:String, required:true,unique:[true, "Phone Number already in use" ]},
     role:{type:String,required:true,default:"user"},
     email: {
         type: String,
         trim: true,
-        unique: true,
+        unique: [true, "Email address already in use" ],
     },
     password: {type:String, required:true},
     image: {type:String,default:null},

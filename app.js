@@ -9,13 +9,13 @@ const usersRoute = require('./src/routes/user');
 
 const veterenaireRoute = require('./src/routes/veterinaire')
 const rdvRoute = require('./src/routes/rendez-vous')
-const postsRoute = require('./src/routes/post');
+
 //========== configuration ============
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req,res,next) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Cache-Control");
     // intercept OPTIONS method
     if ('OPTIONS' == req.method){
@@ -31,13 +31,10 @@ mongoose.connect("mongodb+srv://admin:admindb@cluster0.yl1pn.mongodb.net/Zooa?re
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
-.then(() => {console.log("Connected to database");})
+.then(() => {console.log("Connected to database")})
 .catch(err => console.log("error has been occured: ",err));
 
 // ========= configurring routes ==========
-// app.use("/api/posts",postsRoute);
-// app.use("/api/users",usersRoute);
-
 app.use("/api/veterinaire", veterenaireRoute)
 app.use("/api/appointement", rdvRoute)
 app.use("/api/posts",postsRoute)
