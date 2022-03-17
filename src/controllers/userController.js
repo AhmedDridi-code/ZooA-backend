@@ -1,8 +1,14 @@
-const _link  = "localhost:3000/api/users/"
+const _ = require('lodash')
+const {ObjectId} = require('mongodb')
+
 const User = require('../models/user')
 
 module.exports.deleteUser= function(req, res){
-    User.findOneAndDelete({ _id : req.params.id})
+    let id=req.params.id
+    if(!ObjectId.isValid(id)){
+        res.status(404).json({error : "Invalid ID"})
+    }
+    User.findOneAndDelete({ _id : id})
     .then(result=>{
         if(result){
            res.status(201).json({
@@ -17,9 +23,32 @@ module.exports.deleteUser= function(req, res){
     })
     .catch(error=>{
        res.status(401).json({
-           errors : error.message
+           errors : error
        })
     })
 }
+module.exports.updateUser= async function(req, res){
+    const id=req.params.id;
+    if(!ObjectId.isValid(id)){
+        return res.status(404).json({error : "Invalid ID"})
+    }
+    const body = _.pick(req.body,['email','password','lname','fname', 'phone','image', 'role','birthdate'])
+    if(body.password){
+        try {
+            const salt= await bcrypt.genSalt();
+            body.password= await bcrypt.hash(body.password , salt)
+        } catch (error) {
+            res.status(400).json(error.message)
+        }
+    }
+   User.findByIdAndUpdate(id , {$set: body})
+   .then(result=>{
+        res.status(201).json(result)
+    }).catch(err=>{
+        res.status(404).json(err)
+    })
+}
+
+
 
 

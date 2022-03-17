@@ -50,6 +50,6 @@ router.post("/login",(req,res)=>{
     })
 })
 router.delete("/deleteuser/:id", userController.deleteUser)
-
+router.patch("/updateuser/:id", userController.updateUser)
 
 module.exports =router;
