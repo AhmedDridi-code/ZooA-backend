@@ -18,9 +18,12 @@ router.post("/signup",(req,res)=>{
         user.birthdate instanceof Date; // true
 
         user.save().then(result=>{
+            console.log(user);
             res.status(200).json({message:"User created",result: result})
         }).catch(err=>{
+            console.log(err);
             res.status(500).json({error:err});
+
         })
     })
     .catch(err=>{

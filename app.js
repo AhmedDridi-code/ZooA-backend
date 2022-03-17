@@ -4,7 +4,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
-const postsRoute = require('./src/routes/post');
 const usersRoute = require('./src/routes/user');
 //app.use(cors);
 
