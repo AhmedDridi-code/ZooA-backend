@@ -46,7 +46,7 @@ router.post("/login",(req,res)=>{
             return res.status(401).json({message:"problem in bycript"})
         }
         const token = jwt.sign({email:fetchedUSer.email,userId:fetchedUSer._id}, "secret_this_should_be_longer",{expiresIn:"5h"})
-        res.status(200).json({token:token});
+        res.status(200).json({token:token,expiresIn:3600});
     })
     .catch(err=>{
         console.log(err);
