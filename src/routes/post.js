@@ -18,7 +18,7 @@ router.get('/',async (req, res)=>{
 
 
 //add a post
-router.post('/new', async (req, res)=>{
+router.post('/', async (req, res)=>{
    
         const post = new Post({
             description: req.body.description,
