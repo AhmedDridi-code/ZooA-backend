@@ -53,7 +53,9 @@ router.post("/login",(req,res)=>{
         return res.status(401).json({message:"problem in bycript"})
     })
 })
+router.get("",userController.findAllUsers);
 router.delete("/deleteuser/:id", userController.deleteUser)
-
+router.patch("/updateuser/:id", userController.updateUser)
+router.get("/:id", userController.findUserById)
 
 module.exports =router;
