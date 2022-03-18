@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const app = express();
 const postsRoute = require('./src/routes/post');
 const usersRoute = require('./src/routes/user');
+const upgradeRequestRoute=require('./src/routes/upgradeRequest')
 //app.use(cors);
 
 const veterenaireRoute = require('./src/routes/veterinaire')
@@ -27,6 +28,7 @@ app.use((req,res,next) => {
     }
 })
 
+
 //=========== connecting to database ==============
 mongoose.connect("mongodb+srv://admin:admindb@cluster0.yl1pn.mongodb.net/Zooa?retryWrites=true&w=majority", {
     useNewUrlParser: true,
@@ -40,6 +42,6 @@ app.use("/api/veterinaire", veterenaireRoute)
 app.use("/api/appointement", rdvRoute)
 app.use("/api/posts",postsRoute)
 app.use("/api/users",usersRoute)
-
+app.use("/api/upgradeRequest",upgradeRequestRoute)
 // ======== exporting app ========
 module.exports =app;
