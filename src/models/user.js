@@ -11,6 +11,7 @@ const userSchema = mongoose.Schema({
         trim: true,
         unique: [true, "Email address already in use" ],
     },
+    password: {type:String, required:true},
     image: {type:String,default:null},
     ratings:[{
         type:mongoose.Schema.Types.ObjectId,
