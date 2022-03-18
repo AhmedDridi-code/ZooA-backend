@@ -49,6 +49,27 @@ module.exports.updateUser= async function(req, res){
     })
 }
 
+module.exports.findUserById= function(req, res){
+     let id= req.params.id
+    if(!ObjectId.isValid(id)){
+        res.status(404).json({error : "Invalid ID"})
+    }
+     User.findById(id)
+     .then(result=>{
+        res.status(200).json(result)
+     }).catch(error=>{
+        res.status(404).json(error)
+     })
+ }
 
+ module.exports.findAllUsers = function(req, res){
+     User.find()
+     .then(result=>{
+        res.status(200).json(result)
+     })
+     .catch(error =>{
+        res.status(404).json(error)
+     })
+ }
 
 
