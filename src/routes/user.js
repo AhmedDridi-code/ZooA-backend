@@ -34,10 +34,13 @@ router.post("/signup",(req,res)=>{
 
 router.post("/login",(req,res)=>{
     let fetchedUSer;
+    console.log("body: "+req.body);
     User.findOne({email:req.body.email}).then(user=>{
         if(!user){
+            console.log("User not found")
             return res.status(404).json({message:"User not found"})
         }
+        console.log("user found: "+user)
         fetchedUSer=user;
         return bcrypt.compare(req.body.password,user.password)
     })
