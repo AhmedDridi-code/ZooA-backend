@@ -3,6 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require ('path');
 const app = express();
 const usersRoute = require('./src/routes/user');
 const upgradeRequestRoute=require('./src/routes/upgradeRequest')
@@ -10,7 +11,7 @@ const upgradeRequestRoute=require('./src/routes/upgradeRequest')
 
 const veterenaireRoute = require('./src/routes/veterinaire')
 const rdvRoute = require('./src/routes/rendez-vous')
-
+const postsRoute =require('./src/routes/post')
 //========== configuration ============
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -37,6 +38,7 @@ mongoose.connect("mongodb+srv://admin:admindb@cluster0.yl1pn.mongodb.net/Zooa?re
 .catch(err => console.log("error has been occured: ",err));
 
 // ========= configurring routes ==========
+app.use("/images",express.static(path.join('./src/images')))
 app.use("/api/veterinaire", veterenaireRoute)
 app.use("/api/appointement", rdvRoute)
 app.use("/api/posts",postsRoute)
