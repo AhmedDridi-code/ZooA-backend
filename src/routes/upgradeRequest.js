@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {upload} =require('../outils/fileStorageEngine')
+const upload = require('../utils/multerSingleFileConfig')
 
 
 const upgradeRequestController = require('../controllers/upgradeRequestController')

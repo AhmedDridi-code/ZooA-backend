@@ -3,11 +3,14 @@ const router = express.Router();
 const Post = require('../models/post');
 const Comment =require('../models/comment');
 const Like =require('../models/like');
+const upload = require('../controllers/uploads');
+
+
 
 //get all posts
 router.get('/',async (req, res)=>{
     try {
-        const posts = await Post.find({}).populate('comments');
+        const posts = await Post.find({}).populate('user comments');
         res.status(200).json(posts);
 
     }catch (err) {
@@ -16,25 +19,23 @@ router.get('/',async (req, res)=>{
     }
 })
 
-
-//add a post
-router.post('/new', async (req, res)=>{
-   
-        const post = new Post({
-            description: req.body.description,
-            image: req.body.image,
-          })
-    try{
-          const p= await post.save();  
-          res.status(200).json(p);
+//get post by id 
+router.get('/:id' , async (req, res)=>{
+    try {
+        const post = await Post.findById(req.params.id);
+        res.status(200).json(post);
     }catch (err) {
         res.status(500).json({error:err});
     }
-   
+})
+
+
+//add a post (with image)
+router.post('/',upload.multipleUpload, async (req, res)=>{ 
 })
 
 //delete a post
-router.delete('/delete/:id', async (req, res )=>{
+router.delete('/:id', async (req, res )=>{
     try {
         const post = await Post.findByIdAndDelete({_id:req.params.id});
         res.status(200).json(post);
@@ -45,9 +46,9 @@ router.delete('/delete/:id', async (req, res )=>{
 })
 
 //update a post
-router.put('/update/:id',async (req, res)=>{
+router.put('/:id', async (req, res)=>{
     try{
-        const post = await Post.findByIdAndUpdate(req.params.id,{description:req.body.description,image:req.body.image},{new:true});
+        const post = await Post.findByIdAndUpdate(req.params.id,{description:req.body.description},{new:true});
           res.status(200).json(post);
     }catch (err) {
         res.status(500).json({error:err});
@@ -60,7 +61,8 @@ router.post('/:id/comment',async (req, res)=>{
     try{
     const post= await Post.findById(req.params.id);
     const comment = new Comment({
-         text : req.body.text
+         text : req.body.text,
+         user : req.body.user
     })
     const c= await comment.save();
     post.comments.push(c._id);
@@ -105,7 +107,9 @@ router.put('/:id/comment/:comment_id', async (req, res)=>{
 router.post('/:id/like',async (req, res)=>{
     try{
     const post= await Post.findById(req.params.id);
-    const like = new Like({})
+    const like = new Like({
+        user : req.body.user
+    })
     const l= await like.save();
     post.likes.push(l._id);
     const updated = await post.save();
