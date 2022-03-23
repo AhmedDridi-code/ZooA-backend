@@ -1,14 +1,14 @@
 const jwt = require('jsonwebtoken');
+//this middleware add the user id and the token to the request (req.authData)
 module.exports = (req,res,next) => {
     try{
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken=jwt.verify(token,"secret_this_should_be_longer");
-        console.log("verified")
         req.dataAuth=decodedToken;
-        next();
+        console.log(req.dataAuth);
+        next()
     }catch(err){
-        console.log("not verified")
-        res.status(401).json({message:"Auth failed!"})
+        next()
     }
 
 }
