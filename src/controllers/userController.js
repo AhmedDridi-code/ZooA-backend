@@ -3,7 +3,7 @@ const {ObjectId} = require('mongodb')
 
 const User = require('../models/user')
 
-module.exports.deleteUser= function(req, res){
+deleteUser= function(req, res){
     let id=req.params.id
     if(!ObjectId.isValid(id)){
         res.status(404).json({error : "Invalid ID"})
@@ -27,7 +27,7 @@ module.exports.deleteUser= function(req, res){
        })
     })
 }
-module.exports.updateUser= async function(req, res){
+updateUser= async function(req, res){
     const id=req.params.id;
     if(!ObjectId.isValid(id)){
         return res.status(404).json({error : "Invalid ID"})
@@ -49,20 +49,19 @@ module.exports.updateUser= async function(req, res){
     })
 }
 
-module.exports.findUserById= function(req, res){
-     let id= req.params.id
+findUserById= async function(req, res){
+    let id= req.params.id
     if(!ObjectId.isValid(id)){
-        res.status(404).json({error : "Invalid ID"})
+        return  res.status(404).json({error : "Invalid ID"})
     }
-     User.findById(id)
-     .then(result=>{
-        res.status(200).json(result)
-     }).catch(error=>{
-        res.status(404).json(error)
-     })
+    let user=await checkUserExists(req, res)
+    console.log(user)
+ 
+   
+  
  }
 
- module.exports.findAllUsers = function(req, res){
+findAllUsers = function(req, res){
      User.find()
      .then(result=>{
         res.status(200).json(result)
@@ -70,6 +69,24 @@ module.exports.findUserById= function(req, res){
      .catch(error =>{
         res.status(404).json(error)
      })
+ }
+
+
+
+  function checkUserExists(req, res){
+    let id= req.params.id
+       
+     return User.findById(id).exec()
+     .then(user=>{return user})
+     .catch(error=>{return "Error occured"})
+            
+        
+            
+     
+}
+
+ module.exports={
+    deleteUser,updateUser,findUserById,findAllUsers, checkUserExists
  }
 
 

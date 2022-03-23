@@ -7,4 +7,5 @@ const upgradeRequestController = require('../controllers/upgradeRequestControlle
 
 router.get('',upgradeRequestController.findAllUpgradeRequests)
 router.post('/send/:id',upload.single('attachedFile'),upgradeRequestController.sendRequest)
+router.get('/get/:id',upgradeRequestController.getUpgradeRequestById)
 module.exports = router;

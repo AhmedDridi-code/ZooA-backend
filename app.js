@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const app = express();
 const usersRoute = require('./src/routes/user');
 const upgradeRequestRoute=require('./src/routes/upgradeRequest')
+const postsRoute = require('./src/routes/post')
 //app.use(cors);
 
 const veterenaireRoute = require('./src/routes/veterinaire')
