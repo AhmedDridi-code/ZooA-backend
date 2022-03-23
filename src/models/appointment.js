@@ -1,6 +1,7 @@
 var mongoose  = require("mongoose"),
 appointmentSchema = mongoose.Schema({
     date:{type:Date, required:true},
+    description:  {type:String, required:true},
     user :{
             type:mongoose.Schema.Types.ObjectId,
             ref:"User"
