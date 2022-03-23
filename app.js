@@ -12,10 +12,11 @@ const upgradeRequestRoute=require('./src/routes/upgradeRequest')
 const postsRoute = require('./src/routes/post');
 const veterenaireRoute = require('./src/routes/veterinaire')
 const rdvRoute = require('./src/routes/rendez-vous')
-const postsRoute =require('./src/routes/post')
+const userData = require('./src/middlewares/UserData')
 //========== configuration ============
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(userData);
 
 
 // configuring cors
@@ -23,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req,res,next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Cache-Control");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control");
     // intercept OPTIONS method
     if ('OPTIONS' == req.method){
       res.send(200);

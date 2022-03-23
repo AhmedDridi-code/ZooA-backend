@@ -4,11 +4,10 @@ const Post = require('../models/post');
 const Comment =require('../models/comment');
 const Like =require('../models/like');
 const upload = require('../controllers/uploads');
-
-
+const checkAuth = require("../middlewares/check-auth");
 
 //get all posts
-router.get('/',async (req, res)=>{
+router.get('/', async (req, res)=>{
     try {
         const posts = await Post.find({}).populate('user comments');
         res.status(200).json(posts);
