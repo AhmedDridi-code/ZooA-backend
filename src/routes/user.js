@@ -5,6 +5,7 @@ const router = express.Router();
 const User = require('../models/user')
 const multer = require("multer");
 const userController= require('../controllers/userController')
+
 router.post("/signup",(req,res)=>{
     bcrypt.hash(req.body.password,10)
 .then(hash=>{
@@ -46,7 +47,7 @@ router.post("/login",(req,res)=>{
             return res.status(401).json({message:"problem in bycript"})
         }
         const token = jwt.sign({email:fetchedUSer.email,userId:fetchedUSer._id, role:fetchedUSer.role}, "secret_this_should_be_longer",{expiresIn:"5h"})
-        res.status(200).json({token:token});
+        return res.status(200).json({token:token});
     })
     .catch(err=>{
         console.log(err);
