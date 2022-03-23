@@ -12,7 +12,6 @@ const upgradeRequestRoute=require('./src/routes/upgradeRequest')
 const postsRoute = require('./src/routes/post');
 const veterenaireRoute = require('./src/routes/veterinaire')
 const rdvRoute = require('./src/routes/rendez-vous')
-const postsRoute =require('./src/routes/post')
 //========== configuration ============
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
