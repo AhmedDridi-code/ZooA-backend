@@ -34,10 +34,13 @@ router.post("/signup",(req,res)=>{
 
 router.post("/login",(req,res)=>{
     let fetchedUSer;
+    console.log("body: "+req.body);
     User.findOne({email:req.body.email}).then(user=>{
         if(!user){
+            console.log("User not found")
             return res.status(404).json({message:"User not found"})
         }
+        console.log("user found: "+user)
         fetchedUSer=user;
         return bcrypt.compare(req.body.password,user.password)
     })
@@ -45,8 +48,8 @@ router.post("/login",(req,res)=>{
         if(!result){
             return res.status(401).json({message:"problem in bycript"})
         }
-        const token = jwt.sign({email:fetchedUSer.email,userId:fetchedUSer._id, role:fetchedUSer.role}, "secret_this_should_be_longer",{expiresIn:"5h"})
-        res.status(200).json({token:token});
+        const token = jwt.sign({email:fetchedUSer.email,userId:fetchedUSer._id}, "secret_this_should_be_longer",{expiresIn:"5h"})
+        res.status(200).json({token:token, expiresIn:3600, userId:fetchedUSer._id});
     })
     .catch(err=>{
         console.log(err);
