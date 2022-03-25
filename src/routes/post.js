@@ -115,7 +115,7 @@ router.get('/:id/comments', async (req, res)=>{
 })
 
 // //get like by user
-// router.get('/:id/like', checkAuth, async (req, res) => {
+// router.post('/:id/like', checkAuth, async (req, res) => {
 //     try {
 //         const post = await Post.findById(req.params.id)
 //         const likes = post.likes
@@ -152,7 +152,7 @@ router.post('/:id/like',async (req, res)=>{
     try{
     const post= await Post.findById(req.params.id)
     const like = new Like({
-        user : req.body.user
+        user: req.body.user
     })
     const l= await like.save();
     post.likes.push(l._id);

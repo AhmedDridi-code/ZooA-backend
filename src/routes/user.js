@@ -5,6 +5,7 @@ const router = express.Router();
 const User = require('../models/user')
 const multer = require("multer");
 const userController= require('../controllers/userController')
+
 router.post("/signup",(req,res)=>{
     bcrypt.hash(req.body.password,10)
 .then(hash=>{
