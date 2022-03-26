@@ -40,7 +40,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 //add a post (with image)
-router.post('/',upload.array('images'), async (req, res)=>{ 
+router.post('/',checkAuth,upload.array('images'), async (req, res)=>{ 
     let post;
     try {
         //const images = req.files;
