@@ -5,7 +5,6 @@ const Comment =require('../models/comment');
 const Like =require('../models/like');
 const checkAuth = require("../middlewares/check-auth");
 const multer = require("multer");
-const path = require('path');
 
 //get all posts
 router.get('/', async (req, res)=>{
@@ -52,7 +51,7 @@ router.post('/',upload.array('images'), async (req, res)=>{
             post = new Post({
                 description: req.body.description,
                 images: images,
-                user: req.dataAuth.userId
+                user: req.body.user
             })
             const p = await post.save();
             console.log("post added")
@@ -60,7 +59,7 @@ router.post('/',upload.array('images'), async (req, res)=>{
         } else {
             post = new Post({
                 description: req.body.description,
-                user: req.dataAuth.userId
+                user: req.body.user
             })
             const p = await post.save();
             console.log("post added without images")
@@ -206,8 +205,6 @@ router.post('/:id/like', checkAuth, async (req, res) => {
         const post = await Post.findById(req.params.id).populate('user likes')
         const likes = post.likes
         const like = likes.find(like => like.user == req.dataAuth.userId)
-        console.log(like);
-        console.log(likes);
         let updatedpost;
         if (like) {
             updatedpost = await Post.findByIdAndUpdate(
@@ -221,7 +218,7 @@ router.post('/:id/like', checkAuth, async (req, res) => {
         }
         else {
             const like = new Like({
-                user: req.dataAuth.userId
+                user: req.dataAuth
             })
             const l = await like.save();
             post.likes.push(l._id);
@@ -229,6 +226,7 @@ router.post('/:id/like', checkAuth, async (req, res) => {
         }
         res.status(200).json(updatedpost)
     } catch (err) {
+        console.log(err);
         res.status(500).json({ error: err });
     }
 })
