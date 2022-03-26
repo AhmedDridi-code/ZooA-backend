@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const postSchema = mongoose.Schema({
     description:String,
-    image:[String] ,
+    images : [String],
     date:{type:Date, required:true, default:new Date()},
     user : {
             type : mongoose.Schema.Types.ObjectId,
