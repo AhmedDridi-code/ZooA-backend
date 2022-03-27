@@ -39,7 +39,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 //add a post (with image)
-router.post('/',upload.array('images'), async (req, res)=>{ 
+router.post('/',checkAuth,upload.array('images'), async (req, res)=>{ 
     let post;
     try {
         //const images = req.files;
@@ -51,7 +51,7 @@ router.post('/',upload.array('images'), async (req, res)=>{
             post = new Post({
                 description: req.body.description,
                 images: images,
-                user: req.body.user
+                user: req.dataAuth.userId
             })
             const p = await post.save();
             console.log("post added")
@@ -59,7 +59,7 @@ router.post('/',upload.array('images'), async (req, res)=>{
         } else {
             post = new Post({
                 description: req.body.description,
-                user: req.body.user
+                user: req.dataAuth.userId
             })
             const p = await post.save();
             console.log("post added without images")
