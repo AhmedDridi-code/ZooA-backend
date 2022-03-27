@@ -16,7 +16,7 @@ const userData = require('./src/middlewares/UserData')
 //========== configuration ============
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(userData);
+//app.use(userData);
 
 
 // configuring cors

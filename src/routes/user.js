@@ -6,6 +6,16 @@ const User = require('../models/user')
 const multer = require("multer");
 const userController= require('../controllers/userController')
 
+router.get("/:id",async(req, res) => {
+    try{
+        const user = await User.findById(req.params.id);
+        res.status(200).json({user:user});
+    }catch(err){
+        console.log(err);
+        res.status(500).json({err})
+    }
+})
+
 router.post("/signup",(req,res)=>{
     bcrypt.hash(req.body.password,10)
 .then(hash=>{
@@ -46,9 +56,9 @@ router.post("/login",(req,res)=>{
     })
     .then(result=>{
         if(!result){
-            return res.status(401).json({message:"problem in bycript"})
+            return res.status(401).json({message:"Unauthorised!"})
         }
-        const token = jwt.sign({email:fetchedUSer.email,userId:fetchedUSer._id}, "secret_this_should_be_longer",{expiresIn:"5h"})
+        const token = jwt.sign({email:fetchedUSer.email,userId:fetchedUSer._id}, "secret_this_should_be_longer",{expiresIn:"1h"})
         res.status(200).json({token:token, expiresIn:3600, userId:fetchedUSer._id});
     })
     .catch(err=>{
