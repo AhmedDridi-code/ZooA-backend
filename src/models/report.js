@@ -1,13 +1,14 @@
 var mongoose  = require("mongoose"),
-signalSchema = mongoose.Schema({
+reportSchema = mongoose.Schema({
     date:{type:Date, required:true},
-    user:{
+    sender:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"User"
     },
-    userSignaled:{
+    reported_post: {
         type:mongoose.Schema.Types.ObjectId,
-        ref:"User"
+            ref:"Post"
     }
+    
 });
-module.exports = mongoose.model("Signal",signalSchema);
+module.exports = mongoose.model("Report",reportSchema);

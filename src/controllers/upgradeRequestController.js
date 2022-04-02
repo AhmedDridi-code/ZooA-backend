@@ -1,10 +1,11 @@
 const UpgradeRequest = require('../models/upgradeRequest');
 const {ObjectId} = require('mongodb') ;
-const {checkUserExists}=require('../controllers/userController')
+const {checkUserExists , updateUser }=require('../controllers/userController')
 
 
 module.exports.findAllUpgradeRequests=function(req, res){
     UpgradeRequest.find()
+    .populate("user")
     .then(result=>{
         res.status(200).json(result)
     })
@@ -24,7 +25,7 @@ module.exports.sendRequest=async function(req, res){
     let user= await checkUserExists(req, res) ;
      //The user exists
     if(user){
-        UpgradeRequest.find({user_id : user_id})
+        UpgradeRequest.find({user : user_id})
     .then(result=>{
         //if the request has been already sent
         if(result.length > 0){
@@ -33,7 +34,7 @@ module.exports.sendRequest=async function(req, res){
         // if this is a new request
         else{
             let request= new UpgradeRequest({
-                user_id : user_id,
+                user : user_id,
                 date: Date.now() , 
                 upgradeTo : req.body.upgradeTo,
                 attachedFile :  req.file ?  req.file.filename : null , 
@@ -47,7 +48,7 @@ module.exports.sendRequest=async function(req, res){
                    })
         }
     })
-    .catch(error=>{console.log(error.message)})
+    .catch(error=>{error.message})
 
     }
     //UserID not found 
@@ -68,14 +69,19 @@ module.exports.getUpgradeRequestById=async function(req, res){
     }
     
 }
+ module.exports.validateRequest = async function(req, res){
+        updateUser(req, res) ; 
 
-module.exports.checkUpgradeRequest= function(req, res){
-    let id = req.params.id;
-    if(!ObjectId.isValid(id)){
-        return res.status(404).json({error : "Invalid ID"})
-    }
+ }
+
+module.exports.deleteUpgradeRequest = function(req, res){
+    let id= req.params.id
+    UpgradeRequest.deleteOne({ _id : id})
+                  .then(result=>{
+                      res.status(200).json("Upgrade request deleted")
+                  })
+                  .catch(error=>{ res.status(401).json({error:err})})
 }
-
 function upgradeRequestById(req,res){
     return UpgradeRequest.findById(req.params.id)
                   .then(result=>{ return result })
