@@ -3,8 +3,17 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/user')
-const multer = require("multer");
 const userController= require('../controllers/userController')
+
+router.get("/:id",async(req, res) => {
+    try{
+        const user = await User.findById(req.params.id);
+        res.status(200).json({user:user});
+    }catch(err){
+        console.log(err);
+        res.status(500).json({err})
+    }
+})
 
 router.post("/signup",(req,res)=>{
     bcrypt.hash(req.body.password,10)
@@ -25,7 +34,6 @@ router.post("/signup",(req,res)=>{
         }).catch(err=>{
             console.log(err);
             res.status(500).json({error:err});
-
         })
     })
     .catch(err=>{
@@ -47,7 +55,7 @@ router.post("/login",(req,res)=>{
     })
     .then(result=>{
         if(!result){
-            return res.status(401).json({message:"problem in bycript"})
+            return res.status(401).json({message:"Unauthorised!"})
         }
         const token = jwt.sign({email:fetchedUSer.email,userId:fetchedUSer._id , 
         role:fetchedUSer.role}, "secret_this_should_be_longer",{expiresIn:"5h"})
@@ -58,6 +66,34 @@ router.post("/login",(req,res)=>{
         return res.status(401).json({message:"problem in bycript"})
     })
 })
+
+router.post("/googleAuth", (req, res)=>{
+    User.findOne({email:req.body.email}).then((user)=>{
+        if(!user){
+            const user = new User({
+                email : req.body.email,
+                fname:req.body.fname,
+                lname:req.body.lname,
+                image:req.body.image,
+            })
+            user.save().then(result=>{
+                console.log(result);
+                return res.status(200).json({message:"User created",result: result})
+            }).catch(err=>{
+                console.log(err);
+                return res.status(500).json({error:err});
+            })
+        }else{
+            return res.status(200).json({message:"authentification succeed"});
+        }
+
+    }).catch(err=>{
+        console.log(err);
+        return res.status(500).json({error:err});
+    })
+})
+
+
 router.get("",userController.findAllUsers);
 router.delete("/deleteuser/:id", userController.deleteUser)
 router.patch("/updateuser/:id", userController.updateUser)

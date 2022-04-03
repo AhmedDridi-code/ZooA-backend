@@ -1,4 +1,4 @@
-var mongoose  = require("mongoose"),
+var mongoose  = require("mongoose") ; 
 reportSchema = mongoose.Schema({
     date:{type:Date, required:true},
     sender:{
@@ -8,6 +8,10 @@ reportSchema = mongoose.Schema({
     reported_post: {
         type:mongoose.Schema.Types.ObjectId,
             ref:"Post"
+    },
+    description : {
+        type : String,
+        required : true
     }
     
 });
