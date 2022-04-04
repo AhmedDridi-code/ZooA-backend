@@ -27,6 +27,19 @@ const storage = multer.diskStorage({
         cb(null,name+"-"+Date.now()+"."+ext);
     }
 })
+// get user by name
+router.get("/search",async(req, res) => {
+    try{
+        const name = req.query.name;
+        console.log(name);
+        const user = await User.find({ $or: [{ fname: new RegExp(name,'i') }, { lname: new RegExp(name,'i') }] });
+        
+        res.status(200).json({user:user});
+    }catch(err){
+        console.log(err);
+        res.status(500).json({err})
+    }
+})
 
 router.get("/:id",async(req, res) => {
     try{
@@ -36,6 +49,33 @@ router.get("/:id",async(req, res) => {
         console.log(err);
         res.status(500).json({err})
     }
+})
+
+
+
+router.post("/login",(req,res)=>{
+    let fetchedUSer;
+    console.log("body: "+req.body);
+    User.findOne({email:req.body.email}).then(user=>{
+        if(!user){
+            console.log("User not found")
+            return res.status(404).json({message:"User not found"})
+        }
+        console.log("user found: "+user)
+        fetchedUSer=user;
+        return bcrypt.compare(req.body.password,user.password)
+    })
+    .then(result=>{
+        if(!result){
+            return res.status(401).json({message:"Unauthorised!"})
+        }
+        const token = jwt.sign({email:fetchedUSer.email,userId:fetchedUSer._id}, "secret_this_should_be_longer",{expiresIn:"1h"})
+        return res.status(200).json({token:token, expiresIn:3600, userId:fetchedUSer._id});
+    })
+    .catch(err=>{
+        console.log(err);
+        return res.status(401).json({message:"problem in bycript"})
+    })
 })
 
 router.put("/:id",multer({storage:storage}).single("image"),async(req, res) => {
@@ -85,30 +125,6 @@ router.post("/signup",(req,res)=>{
     })
 })
 
-router.post("/login",(req,res)=>{
-    let fetchedUSer;
-    console.log("body: "+req.body);
-    User.findOne({email:req.body.email}).then(user=>{
-        if(!user){
-            console.log("User not found")
-            return res.status(404).json({message:"User not found"})
-        }
-        console.log("user found: "+user)
-        fetchedUSer=user;
-        return bcrypt.compare(req.body.password,user.password)
-    })
-    .then(result=>{
-        if(!result){
-            return res.status(401).json({message:"Unauthorised!"})
-        }
-        const token = jwt.sign({email:fetchedUSer.email,userId:fetchedUSer._id}, "secret_this_should_be_longer",{expiresIn:"1h"})
-        return res.status(200).json({token:token, expiresIn:3600, userId:fetchedUSer._id});
-    })
-    .catch(err=>{
-        console.log(err);
-        return res.status(401).json({message:"problem in bycript"})
-    })
-})
 
 router.post("/googleAuth", (req, res)=>{
     User.findOne({email:req.body.email}).then((user)=>{
