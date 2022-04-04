@@ -55,10 +55,7 @@ findUserById= async function(req, res){
         return  res.status(404).json({error : "Invalid ID"})
     }
     let user=await checkUserExists(req, res)
-    console.log(user)
- 
-   
-  
+    console.log(user);
  }
 
 findAllUsers = function(req, res){

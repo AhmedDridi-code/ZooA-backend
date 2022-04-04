@@ -5,12 +5,11 @@ const Comment =require('../models/comment');
 const Like =require('../models/like');
 const checkAuth = require("../middlewares/check-auth");
 const multer = require("multer");
-const path = require('path');
 
 //get all posts
 router.get('/', async (req, res)=>{
     try {
-        const posts = await Post.find({}).populate('user comments likes images');
+        const posts = await Post.find({}).populate('user comments likes');
         res.status(200).json(posts);
 
     }catch (err) {
@@ -40,7 +39,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 //add a post (with image)
-router.post('/',upload.array('images'), async (req, res)=>{ 
+router.post('/',checkAuth,upload.array('images'), async (req, res)=>{ 
     let post;
     try {
         //const images = req.files;
@@ -111,14 +110,18 @@ router.post('/',upload.array('images'), async (req, res)=>{
 //}
 
 //delete a post
-router.delete('/:id',checkAuth, async (req, res )=>{
+router.delete('/:id', checkAuth, async (req, res) => {
     try {
-        const post = await Post.findByIdAndDelete({_id:req.params.id});
+        const post = await Post.findByIdAndDelete(
+            {   
+                _id: req.params.id, 
+                user: req.dataAuth.userId 
+            });
         res.status(200).json(post);
-    }catch(err) {
-        res.status(500).json({error:err});
+    } catch (err) {
+        res.status(500).json({ error: err });
     }
-    
+
 })
 
 //update a post
@@ -126,6 +129,7 @@ router.put('/:id',checkAuth, async (req, res)=>{
     try{
         const post = await Post.findByIdAndUpdate(
             req.params.id,
+            req.dataAuth.userId,
             {
                 description:req.body.description
             },
@@ -142,13 +146,14 @@ router.put('/:id',checkAuth, async (req, res)=>{
 
 
 //add comment
-router.post('/:id/comment',checkAuth,async (req, res)=>{
+router.post('/:id/comment',checkAuth, async (req, res)=>{
     try{
-    const post= await Post.findById(req.params.id).populate('user')
+    const post= await Post.findById(req.params.id).populate('user comments')
     const comment = new Comment({
          text : req.body.text,
-         user : req.dataAuth.userId
-    })
+         post :req.params.id,
+         user: req.dataAuth.userId
+            })
     const c= await comment.save();
     post.comments.push(c._id);
     const updated = await post.save();
@@ -164,6 +169,7 @@ router.delete('/:id/comment/:comment_id',checkAuth, async (req, res)=>{
     try {
         const post = await Post.findByIdAndUpdate(
           req.params.id,
+          req.dataAuth.userId ,
           {
             $pull: { comments: req.params.comment_id },
           },
@@ -181,7 +187,14 @@ router.delete('/:id/comment/:comment_id',checkAuth, async (req, res)=>{
 //update comment
 router.put('/:id/comment/:comment_id',checkAuth, async (req, res)=>{
     try {
-        const comment =await Comment.findByIdAndUpdate(req.params.comment_id,{text:req.body.text},{new :true});
+        const comment =await Comment.findByIdAndUpdate(
+            req.params.comment_id,
+            {
+                text:req.body.text
+            },
+            {
+                new :true
+            });
        res.status(200).json(comment);
     }catch(err) {
         res.status(500).json({error:err});
@@ -190,10 +203,20 @@ router.put('/:id/comment/:comment_id',checkAuth, async (req, res)=>{
 
 //get all post comments
 
-router.get('/:id/comments', checkAuth,async (req, res)=>{
+// router.get('/:id/comments', checkAuth,async (req, res)=>{
+//     try {
+//         const post = await Post.findById(req.params.id).populate('user comments');
+//        res.status(200).json(post.comments);
+//     }catch(err) {
+//         console.log(err);
+//         res.status(500).json({error:err});
+//     }
+// })
+//getAll comments
+router.get('/:id/comments',checkAuth,async (req, res)=>{
     try {
-        const post = await Post.findById(req.params.id).populate('user comments');
-       res.status(200).json(post.comments);
+        const comment = await Comment.find({post:req.params.id}).populate('post user');
+       res.status(200).json(comment);
     }catch(err) {
         console.log(err);
         res.status(500).json({error:err});
@@ -206,8 +229,6 @@ router.post('/:id/like', checkAuth, async (req, res) => {
         const post = await Post.findById(req.params.id).populate('user likes')
         const likes = post.likes
         const like = likes.find(like => like.user == req.dataAuth.userId)
-        console.log(like);
-        console.log(likes);
         let updatedpost;
         if (like) {
             updatedpost = await Post.findByIdAndUpdate(
@@ -229,6 +250,7 @@ router.post('/:id/like', checkAuth, async (req, res) => {
         }
         res.status(200).json(updatedpost)
     } catch (err) {
+        console.log(err);
         res.status(500).json({ error: err });
     }
 })
