@@ -10,6 +10,7 @@ const app = express();
 const usersRoute = require('./src/routes/user');
 const upgradeRequestRoute=require('./src/routes/upgradeRequest')
 const postsRoute = require('./src/routes/post');
+const reportRoute = require('./src/routes/report')
 const veterenaireRoute = require('./src/routes/veterinaire')
 const rdvRoute = require('./src/routes/rendez-vous')
 const userData = require('./src/middlewares/UserData')
@@ -48,7 +49,9 @@ app.use("/images",express.static(path.join('./src/images')))
 app.use("/api/veterinaire", veterenaireRoute)
 app.use("/api/appointement", rdvRoute)
 app.use("/api/posts",postsRoute)
+app.use("/api/reports",reportRoute)
 app.use("/api/users",usersRoute)
 app.use("/api/upgradeRequest",upgradeRequestRoute)
+
 // ======== exporting app ========
 module.exports =app;
