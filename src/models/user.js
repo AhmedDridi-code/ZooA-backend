@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
         unique: [true, "Email address already in use" ],
     },
     password: {type:String},
-    image: {type:String,default:null},
+    image: {type:String,default:""},
     ratings:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Rating",
