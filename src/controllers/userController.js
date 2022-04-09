@@ -59,7 +59,7 @@ findUserById= async function(req, res){
  }
 
 findAllUsers = function(req, res){
-     User.find()
+     User.find({role : { $ne : 'admin'}})
      .then(result=>{
         res.status(200).json(result)
      })

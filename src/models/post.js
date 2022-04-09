@@ -7,18 +7,13 @@ const postSchema = mongoose.Schema({
             type : mongoose.Schema.Types.ObjectId,
             ref:"User"
     },
-    comments : [
-        {
-            type : mongoose.Schema.Types.ObjectId,
-            ref  :"Comment"
-        }
-    ],
     likes : [
         {
             type : mongoose.Schema.Types.ObjectId,
             ref  :"Like"
         }
     ],
+    totalReports : {type:Number,default:0}
 
 });
 module.exports = mongoose.model("Post",postSchema);
