@@ -1,6 +1,7 @@
-const express = require('express');
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const express = require('express');
 const router = express.Router();
 const User = require('../models/user')
 const multer = require("multer");
@@ -51,10 +52,35 @@ router.get("/:id",async(req, res) => {
     }
 })
 
+router.post("/signup",(req,res)=>{
+    bcrypt.hash(req.body.password,10)
+.then(hash=>{
+        const user = new User({
+            email : req.body.email,
+            password : hash,
+            fname:req.body.fname,
+            lname:req.body.lname,
+            birthdate:req.body.birthdate,
+            phone:req.body.phone,
+        })
+        user.birthdate instanceof Date; // true
+
+        user.save().then(result=>{
+            console.log(user);
+            res.status(200).json({message:"User created",result: result})
+        }).catch(err=>{
+            console.log(err);
+            res.status(500).json({error:err});
+        })
+    })
+    .catch(err=>{
+        console.error(err);
+    })
+})
 
 
 router.post("/login",(req,res)=>{
-    let fetchedUSer;
+    let fetchedUser;
     console.log("body: "+req.body);
     User.findOne({email:req.body.email}).then(user=>{
         if(!user){
@@ -62,15 +88,15 @@ router.post("/login",(req,res)=>{
             return res.status(404).json({message:"User not found"})
         }
         console.log("user found: "+user)
-        fetchedUSer=user;
+        fetchedUser=user;
         return bcrypt.compare(req.body.password,user.password)
     })
     .then(result=>{
         if(!result){
             return res.status(401).json({message:"Unauthorised!"})
         }
-        const token = jwt.sign({email:fetchedUSer.email,userId:fetchedUSer._id}, "secret_this_should_be_longer",{expiresIn:"1h"})
-        return res.status(200).json({token:token, expiresIn:3600, userId:fetchedUSer._id});
+        const token = jwt.sign({email:fetchedUser.email,userId:fetchedUser._id}, "secret_this_should_be_longer",{expiresIn:"1h"})
+        return res.status(200).json({token:token, expiresIn:3600, userId:fetchedUser._id});
     })
     .catch(err=>{
         console.log(err);
@@ -99,31 +125,6 @@ router.put("/:id",multer({storage:storage}).single("image"),async(req, res) => {
     }
 })
 
-router.post("/signup",(req,res)=>{
-    bcrypt.hash(req.body.password,10)
-.then(hash=>{
-        const user = new User({
-            email : req.body.email,
-            password : hash,
-            fname:req.body.fname,
-            lname:req.body.lname,
-            birthdate:req.body.birthdate,
-            phone:req.body.phone,
-        })
-        user.birthdate instanceof Date; // true
-
-        user.save().then(result=>{
-            console.log(user);
-            res.status(200).json({message:"User created",result: result})
-        }).catch(err=>{
-            console.log(err);
-            res.status(500).json({error:err});
-        })
-    })
-    .catch(err=>{
-        console.error(err);
-    })
-})
 
 
 router.post("/googleAuth", (req, res)=>{
@@ -157,5 +158,4 @@ router.get("",userController.findAllUsers);
 router.delete("/deleteuser/:id", userController.deleteUser)
 router.patch("/updateuser/:id", userController.updateUser)
 router.get("/:id", userController.findUserById)
-
 module.exports =router;
