@@ -17,7 +17,7 @@ const userSchema = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Rating",
     }],
-    totalRatings:{type:Number,default:0}
+    totalRatings:{type:Number,default:0 }
 });
 
 module.exports = mongoose.model("User",userSchema);
