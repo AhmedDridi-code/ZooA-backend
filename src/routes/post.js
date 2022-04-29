@@ -129,7 +129,7 @@ router.put('/:id',checkAuth, async (req, res)=>{
     try{
         const post = await Post.findByIdAndUpdate(
             req.params.id,
-            req.dataAuth.userId,
+            //req.dataAuth.userId,
             {
                 description:req.body.description
             },
@@ -169,7 +169,7 @@ router.delete('/:id/comment/:comment_id',checkAuth, async (req, res)=>{
     try {
         const post = await Post.findByIdAndUpdate(
           req.params.id,
-          req.dataAuth.userId ,
+          //req.dataAuth.userId ,
           {
             $pull: { comments: req.params.comment_id },
           },
