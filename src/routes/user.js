@@ -95,8 +95,8 @@ router.post("/login",(req,res)=>{
         if(!result){
             return res.status(401).json({message:"Unauthorised!"})
         }
-        const token = jwt.sign({email:fetchedUSer.email,userId:fetchedUSer._id,role:fetchedUSer.role}, "secret_this_should_be_longer",{expiresIn:"1h"})
-        return res.status(200).json({token:token, expiresIn:3600, userId:fetchedUSer._id});
+        const token = jwt.sign({email:fetchedUser.email,userId:fetchedUser._id,role:fetchedUser.role}, "secret_this_should_be_longer",{expiresIn:"1h"})
+        return res.status(200).json({token:token, expiresIn:3600, userId:fetchedUser._id,role:fetchedUser.role});
     })
     .catch(err=>{
         console.log(err);
