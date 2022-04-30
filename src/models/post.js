@@ -7,6 +7,13 @@ const postSchema = mongoose.Schema({
             type : mongoose.Schema.Types.ObjectId,
             ref:"User"
     },
+    comments : [
+        {
+            type : mongoose.Schema.Types.ObjectId,
+            ref  :"Comment"
+        }
+    ]
+    ,
     likes : [
         {
             type : mongoose.Schema.Types.ObjectId,
@@ -16,4 +23,12 @@ const postSchema = mongoose.Schema({
     totalReports : {type:Number,default:0}
 
 });
+postSchema.pre('remove',function(next) {
+     const Comments = mongoose.model('Comment') ; 
+     
+     Comments.remove({post : this._id}).then(()=>{
+            next()
+     })
+})
+
 module.exports = mongoose.model("Post",postSchema);

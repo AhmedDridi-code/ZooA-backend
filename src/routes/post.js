@@ -116,12 +116,14 @@ router.post('/',checkAuth,upload.array('images'), async (req, res)=>{
 //delete a post
 router.delete('/:id', checkAuth, async (req, res) => {
     try {
-        const post = await Post.findByIdAndDelete(
+        const post = await Post.findOne(
             {   
                 _id: req.params.id, 
-                user: req.dataAuth.userId 
-            });
-        res.status(200).json(post);
+               // user: req.dataAuth.userId 
+            }).then(post=>{
+                post.remove();
+                res.status(200).json(post);
+            })
     } catch (err) {
         res.status(500).json({ error: err });
     }
@@ -157,6 +159,7 @@ router.post('/:id/comment',checkAuth, async (req, res)=>{
          text : req.body.text,
          post :req.params.id,
          user: req.dataAuth.userId
+         
             })
     const c= await comment.save();
     post.comments.push(c._id);

@@ -20,4 +20,29 @@ const userSchema = mongoose.Schema({
     totalRatings:{type:Number,default:0 }
 });
 
+userSchema.pre('remove',function(next) {
+    
+    const Report=mongoose.model('Report') ; 
+    const Comments=mongoose.model('Comment') ; 
+    const Posts=mongoose.model('Post') ; 
+    const Likes=mongoose.model('Like') ; 
+    const upgradeRequest = mongoose.model('upgradeRequest');
+    //Remove All the reports sent by This user
+    Report.remove({sender : this._id}).then(()=>{
+        //Remove All the comments sent by this user
+        Comments.remove({user : this._id}).then(()=>{
+            //Remove All the posts of this user
+            Posts.remove({user : this._id}).then(()=>{
+                //Remove All the Likes of this user
+                Likes.remove({user : this._id}).then(()=>{
+                    //Remove UpgradeRequest sent by that user
+                    upgradeRequest.remove({user : _id}).then(()=>next())
+                })
+
+            })
+        })
+        
+    })
+})
+
 module.exports = mongoose.model("User",userSchema);

@@ -7,7 +7,7 @@ reportSchema = mongoose.Schema({
     },
     reported_post: {
         type:mongoose.Schema.Types.ObjectId,
-            ref:"Post"
+        ref:"Post"
     },
     description : {
         type : String,

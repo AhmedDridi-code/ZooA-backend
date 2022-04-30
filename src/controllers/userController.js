@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const {ObjectId} = require('mongodb')
-
+const {deleteReportsByUserId} =require('../controllers/reportsController')
 const User = require('../models/user')
 
 deleteUser= function(req, res){
@@ -8,11 +8,12 @@ deleteUser= function(req, res){
     if(!ObjectId.isValid(id)){
         res.status(404).json({error : "Invalid ID"})
     }
-    User.findOneAndDelete({ _id : id})
-    .then(result=>{
-        if(result){
+    User.findOne({ _id : id})
+    .then(user=>{
+        if(user){
+            user.remove();
            res.status(201).json({
-               data : result
+               data : user
            })
         }else{
            res.status(404).json({
@@ -26,6 +27,7 @@ deleteUser= function(req, res){
            errors : error
        })
     })
+   
 }
 updateUser= async function(req, res){
     const id=req.params.id;
