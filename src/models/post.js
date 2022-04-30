@@ -20,6 +20,12 @@ const postSchema = mongoose.Schema({
             ref  :"Like"
         }
     ],
+    comments : [
+        {
+            type : mongoose.Schema.Types.ObjectId,
+            ref  :"Comment"
+        }
+    ],
     totalReports : {type:Number,default:0}
 
 });

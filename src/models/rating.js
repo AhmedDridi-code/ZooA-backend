@@ -1,7 +1,8 @@
 var mongoose  = require("mongoose"),
 ratingSchema = mongoose.Schema({
-    date:{type:Date, required:true},
-    userRating :{
+    value:{type:Number, required:true},
+    date:{type:Date, required:true,default:new Date()},
+    user :{
             type:mongoose.Schema.Types.ObjectId,
             ref:"User"
     },

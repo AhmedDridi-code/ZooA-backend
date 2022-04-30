@@ -14,6 +14,7 @@ const reportRoute = require('./src/routes/report')
 const veterenaireRoute = require('./src/routes/veterinaire')
 const rdvRoute = require('./src/routes/rendez-vous')
 const userData = require('./src/middlewares/UserData')
+const ratingsRoute = require('./src/routes/rating')
 //========== configuration ============
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -51,6 +52,7 @@ app.use("/api/appointement", rdvRoute)
 app.use("/api/posts",postsRoute)
 app.use("/api/reports",reportRoute)
 app.use("/api/users",usersRoute)
+app.use("/api/ratings",ratingsRoute)
 app.use("/api/upgradeRequest",upgradeRequestRoute)
 
 // ======== exporting app ========
