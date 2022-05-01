@@ -3,7 +3,7 @@ const router = express.Router()
 const appointment = require('../models/appointment')
 const Appointment = require('../models/appointment')
 const user = require('../models/user')
-
+const checkAuth = require('../middlewares/check-auth')
 const User = require('../models/user')
 
 //affichage d'un rendez vous d'un veterinaire (par id)
@@ -31,17 +31,23 @@ router.put('/:id', async (req, res) => {
 })
 
 //prendre un rendez vous avec un veterinaire
-router.post('/:id', async (req, res) => {
-
+router.post('/', checkAuth,  async (req, res) => {
+try{
     let appointment = await new Appointment({
         date: req.body.date,
     })
-    appointment.user = req.body.userId
-    appointment.veterinary = req.params.id
+    appointment.user = req.dataAuth.userId
+    appointment.veterinary = req.body.veterinaire
     appointment.description = req.body.description
     appointment.save()
 
     res.status(200).send(appointment)
+}catch(err){
+    console.log(err);
+    res.status(500).send({error:err})
+    
+}
+    
 
 })
 

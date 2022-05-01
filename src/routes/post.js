@@ -222,7 +222,7 @@ router.put('/:id/comment/:comment_id',checkAuth, async (req, res)=>{
 //getAll comments
 router.get('/:id/comments',checkAuth,async (req, res)=>{
     try {
-        const comment = await Comment.find({post:req.params.id}).populate('user');
+        const comment = await Comment.find({post:req.params.id}).populate('user post');
        res.status(200).json(comment);
     }catch(err) {
         console.log(err);
