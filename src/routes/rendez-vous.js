@@ -31,7 +31,7 @@ router.put('/:id', async (req, res) => {
 })
 
 //prendre un rendez vous avec un veterinaire
-router.post('', checkAuth,  async (req, res) => {
+router.post('/', checkAuth,  async (req, res) => {
 try{
     let appointment = await new Appointment({
         date: req.body.date,
