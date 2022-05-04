@@ -88,7 +88,7 @@ router.post("/login",(req,res)=>{
             return res.status(404).json({message:"User not found"})
         }
         console.log("user found: "+user)
-        fetchedUser=user;
+        fetchedUSer=user;
         return bcrypt.compare(req.body.password,user.password)
     })
     .then(result=>{
