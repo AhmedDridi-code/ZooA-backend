@@ -6,4 +6,4 @@ const upgradeRequestSchema=mongoose.Schema({
     attachedFile : { type : String , required: false , default : null} , 
     isValidated : {type  : Boolean  , required:true , default : false} 
 })
-module.exports=mongoose.model('upgradeRequest',upgradeRequestSchema)
+module.exports= mongoose.model("Upgraderequest",upgradeRequestSchema)

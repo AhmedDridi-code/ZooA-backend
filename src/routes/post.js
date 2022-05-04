@@ -52,7 +52,8 @@ router.post('/',checkAuth,upload.array('images'), async (req, res)=>{
             post = new Post({
                 description: req.body.description,
                 images: images,
-                user: req.dataAuth.userId,
+                //user: req.dataAuth.userId,
+                user: req.body.user,
                 totalReports : 0
                
             })

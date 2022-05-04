@@ -11,6 +11,7 @@ deleteUser= function(req, res){
     User.findOne({ _id : id})
     .then(user=>{
         if(user){
+            //
             user.remove();
            res.status(201).json({
                data : user
@@ -61,13 +62,33 @@ findUserById= async function(req, res){
  }
 
 findAllUsers = function(req, res){
-     User.find({role : { $ne : 'admin'}})
-     .then(result=>{
-        res.status(200).json(result)
-     })
-     .catch(error =>{
-        res.status(404).json(error)
-     })
+
+    const roleFilter=req.query['role'];
+    const nameFilter=req.query['name'];
+
+  
+    if(roleFilter.trim().length===0){
+         roleFilter=null;
+      }
+    if(nameFilter.trim().length===0){
+         nameFilter=null;
+      }
+    
+        User.find({    
+            $and: [   
+                 {role:roleFilter?roleFilter:{$ne : 'admin'} },
+                  
+                         
+               { $or : [{ fname: nameFilter?new RegExp(nameFilter,'i'):new RegExp("[a-zA-Z]") } , { lname: nameFilter?new RegExp(nameFilter,'i'):new RegExp("[a-zA-Z]") } ] }
+            ]
+        })
+        .then(result=>{
+           res.status(200).json(result)
+        })
+        .catch(error =>{
+           res.status(404).json(error)
+        })
+    
  }
 
 
