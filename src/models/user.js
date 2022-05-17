@@ -17,7 +17,13 @@ const userSchema = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Rating",
     }],
-    totalRatings:{type:Number,default:0 }
+    totalRatings:{type:Number,default:0 },
+    adresse:{
+        ville:{type:String, required:false},
+        region:{type:String, required:false},
+        street:{type:String, required:false},
+    } 
+
 });
 
 userSchema.pre('remove',function(next) {

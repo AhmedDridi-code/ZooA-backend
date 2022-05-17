@@ -58,10 +58,12 @@ router.post("/signup",(req,res)=>{
         const user = new User({
             email : req.body.email,
             password : hash,
+            role : req.body.role ?? 'user',
             fname:req.body.fname,
             lname:req.body.lname,
             birthdate:req.body.birthdate,
             phone:req.body.phone,
+            adresse:req.body.adresse,
         })
         user.birthdate instanceof Date; // true
 

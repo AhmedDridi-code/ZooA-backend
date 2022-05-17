@@ -29,6 +29,22 @@ router.put('/:id', async (req, res) => {
 
 
 })
+//check user  appointments
+router.get('/myappointments/:id', async (req, res)=>{
+    try{
+
+        appointments = await Appointment.find({}).populate("veterinary")
+        myappointments = appointments.filter(appointments => {return  appointments.user == req.params.id})
+       
+        res.status(200).send(myappointments)
+    }catch(err){
+
+   
+        res.status(404).json({error:err})
+    }
+    
+    
+})
 
 //prendre un rendez vous avec un veterinaire
 router.post('/', checkAuth,  async (req, res) => {

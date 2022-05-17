@@ -25,7 +25,7 @@ router.post('/', (req,res) =>{
 })
 //pour afficher tous les veterinaires
 router.get('/', (req,res)=>{
-    veterinaires= User.find({role:"veterinaire"}).then(resultat=>{
+    veterinaires= User.find({role:"veterinary"}).then(resultat=>{
         res.send(resultat)
     })
 })
